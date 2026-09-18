@@ -133,6 +133,7 @@ class Predictions(commands.Cog):
     @app_commands.describe(user1='The first user to stream')
     @app_commands.describe(user2='The second user to stream')
     @app_commands.describe(prediction_window="How long chatters should be able to submit, in seconds")
+    @app_commands.default_permissions(manage_guild=True)
     async def start_prediction(self, interaction: discord.Interaction, *, user1: discord.Member, user2: discord.Member, prediction_window: int | None):
         ign1, ign2 = await self.get_ign(user1.id), await self.get_ign(user2.id)
         if not ign1 or not ign2:
@@ -141,6 +142,7 @@ class Predictions(commands.Cog):
             await self.ign_followup(interaction, ign1, ign2, user1, user2, prediction_window)
 
     @app_commands.command(name="resolve-prediction", description="Resolve the current prediction")
+    @app_commands.default_permissions(manage_guild=True)
     async def resolve_prediction(self, interaction: discord.Interaction, *, winner: str):
         if winner not in self.outcome_ids.values():
             return await interaction.response.send_message(
@@ -158,10 +160,12 @@ class Predictions(commands.Cog):
         ]
 
     @app_commands.command(name="cancel-prediction", description="Cancel the current prediction")
+    @app_commands.default_permissions(manage_guild=True)
     async def cancel_prediction(self, interaction: discord.Interaction):
         await self.end_prediction(interaction, 'CANCELED')
 
     @app_commands.command(name="lock-prediction", description="Lock the current prediction.")
+    @app_commands.default_permissions(manage_guild=True)
     async def lock_prediction(self, interaction: discord.Interaction):
         await self.end_prediction(interaction, 'LOCKED')
 
