@@ -40,7 +40,7 @@ class Predictions(commands.Cog):
     async def load_prediction(self):
         assert self.bot.pool
         
-        broadcaster_id = await get_setting(self.bot.pool, 'broadcaster_id')
+        broadcaster_id = await get_setting(self.bot.pool, 'broadcaster_id', '')
         if not broadcaster_id: return
         
         auth: Auth | None = self.bot.get_cog("Auth") # type: ignore
