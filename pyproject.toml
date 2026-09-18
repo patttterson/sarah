@@ -1,0 +1,20 @@
+[project]
+name = "sarah"
+version = "0.1.0"
+description = "discord bot for running TAWS predictions"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "asqlite>=2.0.0",
+    "cryptography>=50.0.1",
+    "discord-py>=2.7.1",
+    "jishaku>=2.7.5",
+    "python-dotenv>=1.2.3",
+]
+
+[project.scripts]
+sarah = "sarah.bot:main"
+
+[build-system]
+requires = ["uv_build>=0.10.9,<0.11.0"]
+build-backend = "uv_build"
