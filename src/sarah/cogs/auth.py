@@ -30,7 +30,7 @@ class Auth(commands.Cog):
         app.router.add_get('/callback', self.oauth_callback)
         self.runner = web.AppRunner(app)
         await self.runner.setup()
-        await web.TCPSite(self.runner, '0.0.0.0', self.bot.port).start()
+        await web.TCPSite(self.runner, '127.0.0.1', self.bot.port).start()
 
         self.validate_token.start()
 

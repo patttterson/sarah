@@ -71,7 +71,7 @@ class Settings(commands.Cog):
             return await interaction.response.send_message("This command must be called from a server.", ephemeral=True)
 
         if not channel:
-            current_channel = await get_setting(self.bot.pool, 'log_channel')
+            current_channel = await get_setting(self.bot.pool, 'log_channel', None)
             if not current_channel:
                 return await interaction.response.send_message("There is currently no log channel set. Please set one.")
             if not isinstance(current_channel, int):

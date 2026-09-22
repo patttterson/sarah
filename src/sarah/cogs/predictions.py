@@ -40,7 +40,7 @@ class Predictions(commands.Cog):
     async def load_prediction(self):
         assert self.bot.pool
         
-        broadcaster_id = await get_setting(self.bot.pool, 'broadcaster_id', '')
+        broadcaster_id = await get_setting(self.bot.pool, 'broadcaster_id', None)
         if not broadcaster_id: return
         
         auth: Auth | None = self.bot.get_cog("Auth") # type: ignore
@@ -144,6 +144,11 @@ class Predictions(commands.Cog):
     @app_commands.command(name="resolve-prediction", description="Resolve the current prediction")
     @app_commands.default_permissions(manage_guild=True)
     async def resolve_prediction(self, interaction: discord.Interaction, *, winner: str):
+        if not self.outcome_ids:
+            return await interaction.response.send_message(
+                "To the bot's knowledge, there is currently no prediction running. If this is an error, contact <@1551779336682602496>.",
+                ephemeral=True
+            )
         if winner not in self.outcome_ids.values():
             return await interaction.response.send_message(
                 "That isn't one of the current prediction's outcomes. Please pick one from the list.",

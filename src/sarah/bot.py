@@ -47,7 +47,7 @@ class Bot(commands.Bot):
     async def log(self, message: str, urgent: bool = False):
         assert self.pool
         if not self.log_channel:
-            channel_id = await get_setting(self.pool, 'log_channel')
+            channel_id = await get_setting(self.pool, 'log_channel', None)
             if not isinstance(channel_id, int):
                 print(f"Warning, no valid log channel set. Dropped log: {message}")
                 return

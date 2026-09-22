@@ -5,6 +5,13 @@ from discord import app_commands
 
 log = logging.getLogger(__name__)
 
+class NotSetupError(Exception):
+    """The bot is not set up properly."""
+
+    def __init__(self, name: str):
+        super().__init__(f"Required setting {name!r} is not set.")
+        self.name = name
+
 class TwitchError(app_commands.AppCommandError):
     """Base for all twitch-related errors."""
 
@@ -26,7 +33,12 @@ class PredictionError(TwitchAPIError):
     """Twitch refused to do something with a prediction."""
 
 async def report_error(interaction: discord.Interaction, error: Exception):
-    if isinstance(error, (MissingTokenError, ReauthRequiredError)):
+    if isinstance(error, NotSetupError):
+        if error.name == "broadcaster_id":
+            msg = "The Twitch account isn't linked. The account owner needs to run </setup:1550326746471997516>."
+        else:
+            msg = f"The bot isn't fully set up yet: `{error.name}` hasn't been configured. Ask an admin to set it."
+    elif isinstance(error, (MissingTokenError, ReauthRequiredError)):
         msg = "The Twitch account isn't linked. The account owner needs to run </setup:1550326746471997516>."
     elif isinstance(error, PredictionError):
         msg = f"Twitch couldn't start the prediction: {error.status} {error.message}"
