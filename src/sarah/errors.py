@@ -52,6 +52,6 @@ async def report_error(interaction: discord.Interaction, error: Exception):
     else:
         await interaction.response.send_message(msg, ephemeral=True)
 
-    if not isinstance(error, TwitchError):
+    if not isinstance(error, TwitchError) or not isinstance(error, NotSetupError):
         name = interaction.command.qualified_name if interaction.command else "unknown"
         log.error("Unhandled error in /%s", name, exc_info=error)
