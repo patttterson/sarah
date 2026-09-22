@@ -30,8 +30,8 @@ def full_name(ext):
     return ext if "."in ext else f"sarah.cogs.{ext}"
 
 class Bot(commands.Bot):
-    def __init__(self, command_prefix, intents):
-        super().__init__(command_prefix=command_prefix, intents=intents)
+    def __init__(self, command_prefix, intents, **kwargs):
+        super().__init__(command_prefix=command_prefix, intents=intents, **kwargs)
         self.twitch_client_id = os.getenv("TWITCH_CLIENT_ID")
         self.twitch_client_secret = os.getenv("TWITCH_CLIENT_SECRET")
         self.twitch_redirect_uri = os.getenv("TWITCH_REDIRECT_URI")
@@ -88,7 +88,7 @@ class Bot(commands.Bot):
 
 
 intents = discord.Intents.all()
-bot = Bot(command_prefix="s.", intents=intents)
+bot = Bot(command_prefix="s.", intents=intents, help_command=None)
 
 
 @bot.tree.error
@@ -97,6 +97,28 @@ async def on_app_command_error(
 ):
     await report_error(interaction, getattr(error, "original", error))
 
+@bot.tree.command()
+async def about(interaction: discord.Interaction):
+    msg = """
+Heyo! This is a bot for managing Twitch predictions, made by <@843230753734918154>. *If you are not TAWS staff, reading this is kinda pointless.*
+    
+## How it works:
+To start, get the two Discord users (not TETR.IO usernames) that are in the next streamed match. Then, run </start-prediction:1550326746471997512> followed by their names.
+If either player does not have TETR.IO linked to their Discord, you will see a [popup](https://silly.minji.love/sarah-modal.png) similar to the one below.
+    
+Then, it will ping both users **in the channel the command was run in**, telling them to enter the stream room, and start a prediction on Twitch.
+    
+### Ending a prediction
+- You can **pick a winner** with </resolve-prediction:1550446942473949234>.
+- You can **cancel** a prediction, *which will refund all points*, using </cancel-prediction:1550326746471997514>.
+- You can **lock** a prediction, ending the betting period early, using </lock-prediction:1550326746471997515>.
+    
+### Settings
+*This section only matters if you are an administrator.*
+All the settings should be self explanatory (I hope), except </settings broadcaster-id:1550402063639515136>. Try that command if you are getting unexpected errors, and if that doesn't work, contact <@843230753734918154>.
+    """
+    
+    await interaction.response.send_message(msg, ephemeral=True, allowed_mentions=discord.AllowedMentions.none())
 
 @bot.command(hidden=True)
 @commands.guild_only()
