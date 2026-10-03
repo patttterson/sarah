@@ -116,6 +116,8 @@ Then, it will ping both users **in the channel the command was run in**, telling
 ### Settings
 *This section only matters if you are an administrator.*
 All the settings should be self explanatory (I hope), except </settings broadcaster-id:1550402063639515136>. Try that command if you are getting unexpected errors, and if that doesn't work, contact <@843230753734918154>.
+
+P.S. I coded almost the entire thing in one day! You can see a timelapse of that here: <https://www.youtube.com/watch?v=IM6FOTE5lss>
     """
     
     await interaction.response.send_message(msg, ephemeral=True, allowed_mentions=discord.AllowedMentions.none())
